@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "LocalWire",
+	"webDir": "build",
+	"bundledWebRuntime": false
+}
