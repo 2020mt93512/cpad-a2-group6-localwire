@@ -21,6 +21,7 @@
     "@types/react-dom": "^16.9.10",
     "@types/react-router": "^5.1.11",
     "@types/react-router-dom": "^5.1.7",
+    "firebase": "^9.1.2",
     "ionicons": "^5.4.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
@@ -46,14 +47,21 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint . --ext .ts",
+    "checkstyle": "eslint --fix src --ext .ts",
+    "checktype": "tsc --build tsconfig.json",
+    "prettier:write": "prettier --write \"**/*.{js,jsx,ts,tsx,json}\" \"!**/android/**\" \"!**/ios/**\" \"!**/build/**\" \"!**/public/**\"",
+    "precommit": "npm run checkstyle && npm run checktype && npm run prettier:write"
   },
   "eslintConfig": {
     "extends": [
+      "@ionic/eslint-config/recommended",
       "react-app",
       "react-app/jest"
     ]
   },
+  "prettier": "@ionic/prettier-config",
   "browserslist": {
     "production": [
       ">0.2%",
@@ -67,7 +75,18 @@
     ]
   },
   "devDependencies": {
-    "@capacitor/cli": "3.2.5"
+    "@babel/core": "^7.15.8",
+    "@babel/runtime": "^7.15.4",
+    "@capacitor/cli": "3.2.5",
+    "@ionic/eslint-config": "^0.3.0",
+    "@ionic/prettier-config": "^2.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^7.32.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.26.1",
+    "prettier": "^2.4.1"
   },
   "description": "An Ionic project"
 }
