@@ -1,7 +1,13 @@
-import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet } from '@ionic/react';
+import { IonApp, IonRouterOutlet, IonLoading, IonSplitPane } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import Home from './pages/Home';
+import { Redirect, Route, Switch } from 'react-router-dom';
+
+import Menu from './components/Menu';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import { LoadingProvider } from './context/LoadingContext';
+import Home from './pages/home/Home';
+import SignIn from './pages/login/SignIn';
+import SignUp from './pages/login/SignUp';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -22,18 +28,51 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
+const AppRouter: React.FC = () => {
+  const { loading, isLoggedIn } = useAuth();
+
+  return (
+    <>
+      {loading ? (
+        <IonLoading isOpen translucent spinner="lines" />
+      ) : (
+        <IonReactRouter>
+          <>
+            {isLoggedIn ? (
+              <IonSplitPane contentId="main">
+                <Menu />
+                <IonRouterOutlet id="main">
+                  <Switch>
+                    <Route exact path="/home" component={Home} />
+                    <Redirect from="/" to="/home" exact />
+                    <Redirect from="*" to="/home" exact />
+                  </Switch>
+                </IonRouterOutlet>
+              </IonSplitPane>
+            ) : (
+              <IonRouterOutlet>
+                <Switch>
+                  <Route exact path="/login" component={SignIn} />
+                  <Route exact path="/signup" component={SignUp} />
+                  <Redirect from="/" to="/login" exact />
+                  <Redirect from="*" to="/login" exact />
+                </Switch>
+              </IonRouterOutlet>
+            )}
+          </>
+        </IonReactRouter>
+      )}
+    </>
+  );
+};
+
 const App: React.FC = () => (
   <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route exact path="/home">
-          <Home />
-        </Route>
-        <Route exact path="/">
-          <Redirect to="/home" />
-        </Route>
-      </IonRouterOutlet>
-    </IonReactRouter>
+    <LoadingProvider>
+      <AuthProvider>
+        <AppRouter />
+      </AuthProvider>
+    </LoadingProvider>
   </IonApp>
 );
 
