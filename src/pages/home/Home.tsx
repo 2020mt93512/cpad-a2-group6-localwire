@@ -1,3 +1,4 @@
+import * as firebase from '@firebase/app';
 import {
   IonBackButton,
   IonButton,
@@ -19,6 +20,7 @@ import { getFirestore,collection, addDoc, getDoc, doc } from "firebase/firestore
 import { title } from 'process';
 import React, { useState, useEffect, useRef } from 'react';
 
+import firebaseApp from '../../config/firebase';
 import { withAuth } from '../../hooks/withAuth';
 import './Home.css';
 
@@ -86,3 +88,5 @@ return (
 
 export default withAuth(Home);
 const db = getFirestore();
+const app = firebaseApp;
+

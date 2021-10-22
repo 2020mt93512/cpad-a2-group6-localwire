@@ -30,7 +30,8 @@ const firebaseConfig = {
 };
 
 export default firebaseConfig;
-const app = firebase.initializeApp(firebaseConfigOptions);
+export const firebaseApp = firebase.initializeApp(firebaseConfigOptions);
+
 
 
 
