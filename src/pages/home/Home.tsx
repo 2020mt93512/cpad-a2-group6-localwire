@@ -16,7 +16,7 @@ import {
   IonToolbar,
   isPlatform,
 } from '@ionic/react';
-import { getFirestore,collection, addDoc, getDocs, doc, onSnapshot } from "firebase/firestore"; 
+import { getFirestore,collection, addDoc, getDocs, doc, onSnapshot, query, where  } from "firebase/firestore"; 
 import { title } from 'process';
 import React, { useState, useEffect, useRef } from 'react';
 
@@ -33,9 +33,7 @@ const Home: React.FC = () => {
   const [eventEntry, setEntry] = useState<EventEntry>();
   const [events, setEntries] = useState<EventEntry[]>([]);
 
-  useEffect(() => {
-    
-    (async function() {
+ const getData =  async() : Promise<Event | null > => {
     const eventList : EventEntry[] = [];
     const eventsListInDb = await getDocs(collection(db, "events"));
     eventsListInDb.forEach((doc) => {
@@ -52,8 +50,25 @@ const Home: React.FC = () => {
       console.log("Size of array now " + size);
     });
     setEntries(eventList);
-  })();
-  });
+    return null;
+ }
+
+  const search = async() : Promise<Event | null > => {
+    const eventsCollectionRef = collection(db, 'events');
+
+    if(regions != null) {
+      const q = query(eventsCollectionRef, where("regionIds", "array-contains", regions));
+      //, where("tags", "array-contains", tags), where("content", "array-contains", eventDesc)
+      
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        console.log(doc.id, " => ", doc.data());
+      });
+    };
+
+    return null;
+  }
 
   const insertData = async () :  Promise<Event | null> => {
     try {
@@ -107,6 +122,8 @@ return (
           </IonItem>
         </IonList>
         <IonButton expand="block" onClick={insertData}>Save</IonButton>
+        <IonButton expand="block" onClick={search}>Search</IonButton>
+        <IonButton expand="block" onClick={getData}>Get</IonButton>
         <IonList>
           {events.map((eventEntry) =>
             <IonItem button key={eventEntry.id}
