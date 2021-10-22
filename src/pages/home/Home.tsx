@@ -16,12 +16,13 @@ import {
   IonToolbar,
   isPlatform,
 } from '@ionic/react';
-import { getFirestore,collection, addDoc, getDoc, doc } from "firebase/firestore"; 
+import { getFirestore,collection, addDoc, getDocs, doc, onSnapshot } from "firebase/firestore"; 
 import { title } from 'process';
 import React, { useState, useEffect, useRef } from 'react';
 
 import firebaseApp from '../../config/firebase';
 import { withAuth } from '../../hooks/withAuth';
+import type { EventEntry } from '../../models';
 import './Home.css';
 
 
@@ -29,6 +30,30 @@ const Home: React.FC = () => {
   const [eventDesc, setEventDesc] = useState<any | null>(null);
   const [tags, setTags] = useState<any | null>(null);
   const [regions, setRegions] = useState<any | null>(null);
+  const [eventEntry, setEntry] = useState<EventEntry>();
+  const [events, setEntries] = useState<EventEntry[]>([]);
+
+  useEffect(() => {
+    
+    (async function() {
+    const eventList : EventEntry[] = [];
+    const eventsListInDb = await getDocs(collection(db, "events"));
+    eventsListInDb.forEach((doc) => {
+      
+      console.log(doc.id, " => ", doc.data());
+      const eventEnt : EventEntry = {
+        id: doc.get("id"),
+       description:  doc.get("content"),
+       regions:  doc.get("regionIds"),
+      tags: doc.get("tags")
+      };
+      
+      const size = eventList.push(eventEnt);
+      console.log("Size of array now " + size);
+    });
+    setEntries(eventList);
+  })();
+  });
 
   const insertData = async () :  Promise<Event | null> => {
     try {
@@ -38,6 +63,8 @@ const Home: React.FC = () => {
         regionIds: [regions]
       });
       console.log("Document written with ID: ", docRef.id);
+     
+
     } catch (e) {
       console.error("Error adding document: ", e);
     }
@@ -80,7 +107,28 @@ return (
           </IonItem>
         </IonList>
         <IonButton expand="block" onClick={insertData}>Save</IonButton>
+        <IonList>
+          {events.map((eventEntry) =>
+            <IonItem button key={eventEntry.id}
+              routerLink={`/my/entries/view/${eventEntry.id}`}>
+          
+          <IonLabel>
+                <h2>{eventEntry.description}</h2></IonLabel>
+
+                <IonLabel> 
+                <h3>{eventEntry.tags}</h3></IonLabel>
+                <IonLabel>
+                <h3>{eventEntry.regions}</h3>
+              </IonLabel>
+            </IonItem>
+          )}
+        </IonList>
     </IonContent>
+    <IonContent className="ion-padding">
+        <h2>{eventEntry?.description}</h2>
+        <p>{eventEntry?.tags}</p>
+        <p>{eventEntry?.regions}</p>
+      </IonContent>
     
   </IonPage>
 );
