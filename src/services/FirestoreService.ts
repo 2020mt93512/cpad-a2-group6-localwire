@@ -53,6 +53,22 @@ const deleteEvent = async (userUid: string, eventUid: string): Promise<void> => 
   return Promise.reject('not implemented yet');
 };
 
+const verifyEvent = async (createdByUid: string, userUid: string, eventUid: string): Promise<void> => {
+  return Promise.reject('not implemented yet');
+};
+
+const unverifyEvent = async (createdByUid: string, userUid: string, eventUid: string): Promise<void> => {
+  return Promise.reject('not implemented yet');
+};
+
+const cancelVerifyEvent = async (createdByUid: string, userUid: string, eventUid: string): Promise<void> => {
+  return Promise.reject('not implemented yet');
+};
+
+const cancelUnverifyEvent = async (createdByUid: string, userUid: string, eventUid: string): Promise<void> => {
+  return Promise.reject('not implemented yet');
+};
+
 const firestoreService: DbService = {
   addNewUser,
   addEvent,
@@ -63,6 +79,10 @@ const firestoreService: DbService = {
   getEventData,
   updateEvent,
   deleteEvent,
+  verifyEvent,
+  unverifyEvent,
+  cancelVerifyEvent,
+  cancelUnverifyEvent,
 };
 
 export default firestoreService;

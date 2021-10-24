@@ -8,6 +8,8 @@ export interface EventEntry {
   geohash: string;
   createdBy: string;
   timestamp: number;
+  verifiedBy: string[];
+  unverifiedBy: string[];
 }
 
 export interface EventTag {

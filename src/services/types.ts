@@ -19,4 +19,8 @@ export interface DbService {
   getEventData: (userUid: string, eventUid: string) => Promise<EventEntry | null>;
   updateEvent: (userUid: string, eventUid: string, eventData: UpdateEventDataPayload) => Promise<void>;
   deleteEvent: (userUid: string, eventUid: string) => Promise<void>;
+  verifyEvent: (createdByUid: string, userUid: string, eventUid: string) => Promise<void>;
+  unverifyEvent: (createdByUid: string, userUid: string, eventUid: string) => Promise<void>;
+  cancelVerifyEvent: (createdByUid: string, userUid: string, eventUid: string) => Promise<void>;
+  cancelUnverifyEvent: (createdByUid: string, userUid: string, eventUid: string) => Promise<void>;
 }

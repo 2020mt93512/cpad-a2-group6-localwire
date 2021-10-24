@@ -55,6 +55,8 @@ const AddEventModal: React.FC<AddEventModalProps> = ({
         showSpinner('add-event');
         const eventItem: EventEntry = {
           ...newEvent,
+          verifiedBy: [],
+          unverifiedBy: [],
           uid: '',
           createdBy: user.uid,
           timestamp: Date.now(),

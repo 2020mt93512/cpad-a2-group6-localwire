@@ -52,7 +52,12 @@ const setupOnEventValueChange = (
           const { lat: latitude, long: longitude }: EventEntry = eventItem;
           return filterFalsePositiveGeoHash({ latitude, longitude }, currentLocation, radiusInM);
         })
-        .map((items) => ({ ...items, tags: Object.values(items.tags) }));
+        .map((items) => ({
+          ...items,
+          tags: items.tags ? Object.values(items.tags) : [],
+          verifiedBy: items.verifiedBy ? Object.values(items.verifiedBy) : [],
+          unverifiedBy: items.unverifiedBy ? Object.values(items.unverifiedBy) : [],
+        }));
       setEventsList(nearbyEvents);
     } else {
       setEventsList([]);
@@ -92,7 +97,14 @@ const getMyEvents = async (userUid: string): Promise<EventEntry[]> => {
   const eventsRef = firebaseDatabase.ref(db, `events/${userUid}`);
   const itemsSnapshot = await firebaseDatabase.get(eventsRef);
   const items: EventEntry[] = itemsSnapshot.val();
-  return items ? Object.values(items).map((items) => ({ ...items, tags: Object.values(items.tags) })) : [];
+  return items
+    ? Object.values(items).map((items) => ({
+        ...items,
+        tags: items.tags ? Object.values(items.tags) : [],
+        verifiedBy: items.verifiedBy ? Object.values(items.verifiedBy) : [],
+        unverifiedBy: items.unverifiedBy ? Object.values(items.unverifiedBy) : [],
+      }))
+    : [];
 };
 
 const getEventTags = async (): Promise<EventTag[]> => {
@@ -125,6 +137,32 @@ const deleteEvent = async (userUid: string, eventUid: string): Promise<void> => 
   return firebaseDatabase.remove(eventsRef);
 };
 
+const verifyEvent = async (createdByUid: string, userUid: string, eventUid: string): Promise<void> => {
+  const db = firebaseDatabase.getDatabase();
+  const eventsRef = firebaseDatabase.ref(db, `events/${createdByUid}/${eventUid}/verifiedBy`);
+  await firebaseDatabase.update(eventsRef, { [userUid]: userUid });
+  await cancelUnverifyEvent(createdByUid, userUid, eventUid);
+};
+
+const unverifyEvent = async (createdByUid: string, userUid: string, eventUid: string): Promise<void> => {
+  const db = firebaseDatabase.getDatabase();
+  const eventsRef = firebaseDatabase.ref(db, `events/${createdByUid}/${eventUid}/unverifiedBy`);
+  await firebaseDatabase.update(eventsRef, { [userUid]: userUid });
+  await cancelVerifyEvent(createdByUid, userUid, eventUid);
+};
+
+const cancelVerifyEvent = async (createdByUid: string, userUid: string, eventUid: string): Promise<void> => {
+  const db = firebaseDatabase.getDatabase();
+  const eventsRef = firebaseDatabase.ref(db, `events/${createdByUid}/${eventUid}/verifiedBy/${userUid}`);
+  await firebaseDatabase.remove(eventsRef);
+};
+
+const cancelUnverifyEvent = async (createdByUid: string, userUid: string, eventUid: string): Promise<void> => {
+  const db = firebaseDatabase.getDatabase();
+  const eventsRef = firebaseDatabase.ref(db, `events/${createdByUid}/${eventUid}/unverifiedBy/${userUid}`);
+  await firebaseDatabase.remove(eventsRef);
+};
+
 const realtimeDbService: DbService = {
   addNewUser,
   addEvent,
@@ -135,6 +173,10 @@ const realtimeDbService: DbService = {
   getEventData,
   updateEvent,
   deleteEvent,
+  verifyEvent,
+  unverifyEvent,
+  cancelVerifyEvent,
+  cancelUnverifyEvent,
 };
 
 export default realtimeDbService;
