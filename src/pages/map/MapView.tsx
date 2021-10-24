@@ -10,6 +10,7 @@ import {
   IonSegment,
   IonSegmentButton,
   IonLabel,
+  useIonViewWillEnter,
 } from '@ionic/react';
 import { addOutline, flashOffOutline, flashOutline } from 'ionicons/icons';
 import { Map, Marker, Overlay } from 'pigeon-maps';
@@ -29,7 +30,8 @@ import type { LocationCoords } from '../../utils/location';
 import './MapView.css';
 import { colorPallete as tagColorPallete } from '../../utils/tagColors';
 
-const maptilerProvider = maptiler('d5JQJPLLuap8TkJJlTdJ', 'streets');
+// const maptilerProvider = maptiler('d5JQJPLLuap8TkJJlTdJ', 'streets');
+const maptilerProvider = maptiler('Hb9xbbx1tFh4lDt0IHU6', 'streets');
 
 type MapClickHandler = ({
   event,
@@ -67,8 +69,6 @@ const MapView: React.FC = () => {
   const [showAddEventModal, setShowAddEventModal] = React.useState<boolean>(false);
   const [showInfoById, setShowInfoById] = React.useState<Record<string, boolean>>({});
   const currentEventSub = React.useRef<Unsubscribe | null>(null);
-
-  console.log(events);
 
   const toggleShowCurrentPointInfo = React.useCallback(() => {
     setShowCurrentPointInfo((currentValue) => !currentValue);

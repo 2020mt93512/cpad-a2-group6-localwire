@@ -5,15 +5,18 @@ import {
   IonCard,
   IonCardHeader,
   IonCardSubtitle,
+  IonCol,
   IonContent,
   IonHeader,
   IonIcon,
+  IonLabel,
   IonNote,
   IonPage,
   IonRow,
   IonText,
   IonTitle,
   IonToolbar,
+  useIonViewWillEnter,
 } from '@ionic/react';
 import { arrowForward, navigateOutline } from 'ionicons/icons';
 import React from 'react';
@@ -36,7 +39,7 @@ const MyEvents: React.FC = () => {
   const getDistanceInKm = (eventItem: EventEntry) =>
     currentLocation ? distanceBetween({ latitude: eventItem.lat, longitude: eventItem.long }, currentLocation) : NaN;
 
-  React.useEffect(() => {
+  useIonViewWillEnter(() => {
     const getCurrentLocation = async () => {
       const fetchedLocation = await getLocation();
       return fetchedLocation;
@@ -54,7 +57,7 @@ const MyEvents: React.FC = () => {
     dbServiceImpl.getEventTags().then((newTags) => {
       setEventTags(newTags);
     });
-  }, [user]);
+  });
 
   return (
     <IonPage>
@@ -70,36 +73,40 @@ const MyEvents: React.FC = () => {
           </IonToolbar>
         </IonHeader>
 
-        {user && events && events.length > 0
-          ? events.map((eventItem) => {
-              const distanceString =
-                Math.round(getDistanceInKm(eventItem)) > 0
-                  ? `${Math.round(getDistanceInKm(eventItem))} km away`
-                  : `${Math.round(getDistanceInKm(eventItem) * 1000)} m away`;
+        {user && events && events.length > 0 ? (
+          events.map((eventItem) => {
+            const distanceString =
+              Math.round(getDistanceInKm(eventItem)) > 0
+                ? `${Math.round(getDistanceInKm(eventItem))} km away`
+                : `${Math.round(getDistanceInKm(eventItem) * 1000)} m away`;
 
-              return (
-                <IonCard key={eventItem.uid} routerLink={`/events/${user.uid}/${eventItem.uid}`}>
-                  <IonCardHeader>
-                    <IonCardSubtitle>{eventItem.title}</IonCardSubtitle>
-                    <IonNote color="medium">{eventItem.description}</IonNote>
+            return (
+              <IonCard key={eventItem.uid} routerLink={`/events/${user.uid}/${eventItem.uid}`}>
+                <IonCardHeader>
+                  <IonCardSubtitle>{eventItem.title}</IonCardSubtitle>
+                  <IonNote color="medium">{eventItem.description}</IonNote>
 
-                    <IonRow className="ion-justify-content-between ion-align-items-center">
-                      <IonText color="primary">
-                        <p>
-                          <IonIcon icon={navigateOutline} />
-                          {distanceString}
-                        </p>
-                      </IonText>
+                  <IonRow className="ion-justify-content-between ion-align-items-center">
+                    <IonText color="primary">
+                      <p>
+                        <IonIcon icon={navigateOutline} />
+                        {distanceString}
+                      </p>
+                    </IonText>
 
-                      <IonButton size="small" color="primary">
-                        <IonIcon icon={arrowForward} />
-                      </IonButton>
-                    </IonRow>
-                  </IonCardHeader>
-                </IonCard>
-              );
-            })
-          : 'No events found'}
+                    <IonButton size="small" color="primary">
+                      <IonIcon icon={arrowForward} />
+                    </IonButton>
+                  </IonRow>
+                </IonCardHeader>
+              </IonCard>
+            );
+          })
+        ) : (
+          <div className="no-items-placeholder">
+            <IonCardSubtitle style={{ fontSize: '20px' }}>No events found</IonCardSubtitle>
+          </div>
+        )}
       </IonContent>
     </IonPage>
   );

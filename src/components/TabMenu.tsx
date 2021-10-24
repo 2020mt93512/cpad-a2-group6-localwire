@@ -42,9 +42,7 @@ const TabMenu: React.FC = () => (
   <IonTabs>
     <IonRouterOutlet>
       {tabs.map((tabMenuItem) => (
-        <Route key={tabMenuItem.id} exact path={tabMenuItem.path}>
-          <tabMenuItem.component />
-        </Route>
+        <Route key={tabMenuItem.id} exact path={tabMenuItem.path} component={tabMenuItem.component} />
       ))}
       <Route exact path="/events/:useruid/:eventuid">
         <ViewEvent />
@@ -52,7 +50,7 @@ const TabMenu: React.FC = () => (
       <Redirect from="/login" to="/events/local" exact />
       <Redirect from="/signup" to="/events/local" exact />
       <Redirect from="/" to="/events/local" exact />
-      <Redirect from="*" to="/events/local" exact />
+      <Redirect to="/events/local" />
     </IonRouterOutlet>
     <IonTabBar slot="bottom">
       {tabs.map((tabMenuItem) => (
