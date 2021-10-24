@@ -49,6 +49,10 @@ const updateEvent = async (userUid: string, eventUid: string, eventData: UpdateE
   return Promise.reject('not implemented yet');
 };
 
+const deleteEvent = async (userUid: string, eventUid: string): Promise<void> => {
+  return Promise.reject('not implemented yet');
+};
+
 const firestoreService: DbService = {
   addNewUser,
   addEvent,
@@ -58,6 +62,7 @@ const firestoreService: DbService = {
   getMyEvents,
   getEventData,
   updateEvent,
+  deleteEvent,
 };
 
 export default firestoreService;
