@@ -1,0 +1,6 @@
+{
+  "appId": "com.bits.cpad.localwire",
+  "appName": "LocalWire",
+  "webDir": "build",
+  "bundledWebRuntime": false
+}

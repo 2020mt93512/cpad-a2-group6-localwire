@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "538953225091",
+    "project_id": "localwire-cpad-a2-g6",
+    "storage_bucket": "localwire-cpad-a2-g6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:538953225091:android:3df1163208df864b105cb6",
+        "android_client_info": {
+          "package_name": "com.bits.cpad.localwire"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "538953225091-89birgj5l27922b1nbmolnnrar8do2c9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABblQ0oXynyt_kHFoo9m5Sbu3icj83uWU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "538953225091-89birgj5l27922b1nbmolnnrar8do2c9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "538953225091-qd6afntu8ch23egpan517dg2jqf8t7hf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.bits.cpad.localwire"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
