@@ -8,6 +8,9 @@ The application is build on Ionic-React + Capacitor based application with realt
 
 The project is live and the latest version is deployed at https://localwire.vercel.app/.
 
+A video demo of the application showcasing and explaining the features can be found [here](https://drive.google.com/file/d/19W2cvcwhZ7EFt2o7VsTZ4i0wJpPJowha/view?usp=sharing). Please download the zip and extract the files to view the video.
+
+
 # Team Members
 - S. Nitheesh Prabu (2020mt93512@wilp.bits-pilani.ac.in)
 - Pranab Roy (2020mt93536@wilp.bits-pilani.ac.in)
