@@ -32,14 +32,14 @@ export const MapOverlay: React.FC<MapOverlayProps> = ({ eventItem, currentLocati
     () => distanceBetween({ latitude: eventItem.lat, longitude: eventItem.long }, currentLocation),
     [currentLocation, eventItem.lat, eventItem.long]
   );
-  console.log(eventItem);
+
   const verifiedPercent = React.useMemo(() => {
     const totalVotes = eventItem.verifiedBy.length + eventItem.unverifiedBy.length;
     if (totalVotes > 0) {
       return (eventItem.verifiedBy.length * 100) / totalVotes;
     }
     return 0;
-  }, []);
+  }, [eventItem]);
 
   const verificationColorRange = React.useMemo(() => {
     if (verifiedPercent >= 75) {

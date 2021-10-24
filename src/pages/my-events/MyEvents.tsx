@@ -1,6 +1,7 @@
 import type { User } from '@firebase/auth';
 import type { Unsubscribe } from '@firebase/util';
 import {
+  IonBadge,
   IonButton,
   IonCard,
   IonCardHeader,
@@ -58,6 +59,15 @@ const MyEvents: React.FC = () => {
     });
   });
 
+  const getVerificationColorRange = (verifiedPercent: number) => {
+    if (verifiedPercent >= 75) {
+      return 'success';
+    } else if (verifiedPercent >= 50) {
+      return 'warning';
+    }
+    return 'danger';
+  };
+
   return (
     <IonPage>
       <IonHeader>
@@ -80,6 +90,10 @@ const MyEvents: React.FC = () => {
                 : `${Math.round(getDistanceInKm(eventItem) * 1000)} m away`;
 
             const durationAgo = moment(new Date(eventItem.timestamp)).fromNow();
+            const totalVotes = eventItem.verifiedBy.length + eventItem.unverifiedBy.length;
+
+            const verifiedPercent = totalVotes > 0 ? (eventItem.verifiedBy.length * 100) / totalVotes : 0;
+            const verificationBadgeColor = getVerificationColorRange(verifiedPercent);
 
             return (
               <IonCard key={eventItem.uid} routerLink={`/events/${user.uid}/${eventItem.uid}`}>
@@ -99,6 +113,7 @@ const MyEvents: React.FC = () => {
                       </p>
                     </IonText>
 
+                    <IonBadge color={verificationBadgeColor}>{verifiedPercent}% verified</IonBadge>
                     <IonButton size="small" color="primary">
                       <IonIcon icon={pencilOutline} />
                     </IonButton>

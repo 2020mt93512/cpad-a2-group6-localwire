@@ -128,7 +128,7 @@ const getEventData = async (userUid: string, eventUid: string): Promise<EventEnt
 const updateEvent = async (userUid: string, eventUid: string, eventData: UpdateEventDataPayload): Promise<void> => {
   const db = firebaseDatabase.getDatabase();
   const eventsRef = firebaseDatabase.ref(db, `events/${userUid}/${eventUid}`);
-  await firebaseDatabase.update(eventsRef, eventData);
+  await firebaseDatabase.update(eventsRef, { ...eventData, verifiedBy: [], unverifiedBy: [] });
 };
 
 const deleteEvent = async (userUid: string, eventUid: string): Promise<void> => {
@@ -140,15 +140,15 @@ const deleteEvent = async (userUid: string, eventUid: string): Promise<void> => 
 const verifyEvent = async (createdByUid: string, userUid: string, eventUid: string): Promise<void> => {
   const db = firebaseDatabase.getDatabase();
   const eventsRef = firebaseDatabase.ref(db, `events/${createdByUid}/${eventUid}/verifiedBy`);
-  await firebaseDatabase.update(eventsRef, { [userUid]: userUid });
   await cancelUnverifyEvent(createdByUid, userUid, eventUid);
+  await firebaseDatabase.update(eventsRef, { [userUid]: userUid });
 };
 
 const unverifyEvent = async (createdByUid: string, userUid: string, eventUid: string): Promise<void> => {
   const db = firebaseDatabase.getDatabase();
   const eventsRef = firebaseDatabase.ref(db, `events/${createdByUid}/${eventUid}/unverifiedBy`);
-  await firebaseDatabase.update(eventsRef, { [userUid]: userUid });
   await cancelVerifyEvent(createdByUid, userUid, eventUid);
+  await firebaseDatabase.update(eventsRef, { [userUid]: userUid });
 };
 
 const cancelVerifyEvent = async (createdByUid: string, userUid: string, eventUid: string): Promise<void> => {
