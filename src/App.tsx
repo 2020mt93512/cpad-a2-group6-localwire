@@ -2,10 +2,10 @@ import { IonApp, IonRouterOutlet, IonLoading, IonSplitPane } from '@ionic/react'
 import { IonReactRouter } from '@ionic/react-router';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
-import Menu from './components/Menu';
+import SideMenu from './components/SideMenu';
+import TabMenu from './components/TabMenu';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { LoadingProvider } from './context/LoadingContext';
-import Home from './pages/home/Home';
 import SignIn from './pages/login/SignIn';
 import SignUp from './pages/login/SignUp';
 
@@ -39,13 +39,11 @@ const AppRouter: React.FC = () => {
         <IonReactRouter>
           <>
             {isLoggedIn ? (
-              <IonSplitPane contentId="main">
-                <Menu />
+              <IonSplitPane contentId="main" when={false}>
+                <SideMenu />
                 <IonRouterOutlet id="main">
                   <Switch>
-                    <Route exact path="/home" component={Home} />
-                    <Redirect from="/" to="/home" exact />
-                    <Redirect from="*" to="/home" exact />
+                    <TabMenu />
                   </Switch>
                 </IonRouterOutlet>
               </IonSplitPane>

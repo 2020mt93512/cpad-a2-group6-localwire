@@ -1,0 +1,11 @@
+.add-event-modal-container {
+  padding: 16px;
+}
+
+.add-event-grid {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid red;
+}

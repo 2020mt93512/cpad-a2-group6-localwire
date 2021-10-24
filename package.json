@@ -6,6 +6,7 @@
     "@capacitor/android": "3.2.5",
     "@capacitor/app": "1.0.4",
     "@capacitor/core": "3.2.5",
+    "@capacitor/geolocation": "^1.1.2",
     "@capacitor/haptics": "1.1.0",
     "@capacitor/ios": "3.2.5",
     "@capacitor/keyboard": "1.1.0",
@@ -22,7 +23,9 @@
     "@types/react-router": "^5.1.11",
     "@types/react-router-dom": "^5.1.7",
     "firebase": "^9.1.2",
+    "geofire-common": "^5.2.0",
     "ionicons": "^5.4.0",
+    "pigeon-maps": "^0.19.7",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-router": "^5.2.0",
@@ -52,7 +55,9 @@
     "checkstyle": "eslint --fix src --ext .ts",
     "checktype": "tsc --build tsconfig.json",
     "prettier:write": "prettier --write \"**/*.{js,jsx,ts,tsx,json}\" \"!**/android/**\" \"!**/ios/**\" \"!**/build/**\" \"!**/public/**\"",
-    "precommit": "npm run checkstyle && npm run checktype && npm run prettier:write"
+    "precommit": "npm run checkstyle && npm run checktype && npm run prettier:write",
+    "sync:android": "ionic capacitor sync android",
+    "start:android": "ionic capacitor run android -l --host=0.0.0.0"
   },
   "eslintConfig": {
     "extends": [

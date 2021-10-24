@@ -7,13 +7,17 @@ const validateEmailAndPassword = (inEmailId: string, inPassword: string): boolea
   return validators.emailId(inEmailId) && validators.password(inPassword);
 };
 
-const signUp = async (inEmailId: string, inPassword: string): Promise<UserCredential | null> => {
+const signUp = async (inEmailId: string, inPassword: string, inDisplayName: string): Promise<UserCredential | null> => {
   if (!validateEmailAndPassword(inEmailId, inPassword)) {
     return null;
   }
 
   const auth = firebaseAuth.getAuth();
-  return await firebaseAuth.createUserWithEmailAndPassword(auth, inEmailId, inPassword);
+  const userCredential = await firebaseAuth.createUserWithEmailAndPassword(auth, inEmailId, inPassword);
+  if (userCredential?.user) {
+    await firebaseAuth.updateProfile(userCredential.user, { displayName: inDisplayName });
+  }
+  return userCredential;
 };
 
 const signIn = async (inEmailId: string, inPassword: string): Promise<UserCredential | null> => {
