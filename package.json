@@ -58,7 +58,9 @@
     "prettier:write": "prettier --write \"**/*.{js,jsx,ts,tsx,json}\" \"!**/android/**\" \"!**/ios/**\" \"!**/build/**\" \"!**/public/**\"",
     "precommit": "npm run checkstyle && npm run checktype && npm run prettier:write",
     "sync:android": "ionic capacitor sync android",
-    "start:android": "ionic capacitor run android -l --host=0.0.0.0"
+    "sync:ios": "ionic capacitor sync ios",
+    "start:android": "ionic capacitor run android -l --host=0.0.0.0",
+    "start:ios": "ionic capacitor run ios -l --external"
   },
   "eslintConfig": {
     "extends": [
