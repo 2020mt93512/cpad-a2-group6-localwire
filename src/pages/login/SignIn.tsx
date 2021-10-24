@@ -47,7 +47,7 @@ const SignIn: React.FC = () => {
     showSpinner('login');
     try {
       await authService.signIn(emailId, password);
-      history.push('/home');
+      history.push('/events/local');
     } catch (err: any) {
       console.error(err);
       showToast({
@@ -71,7 +71,7 @@ const SignIn: React.FC = () => {
   ]);
 
   if (isLoggedIn) {
-    return <Redirect to="/home" />;
+    return <Redirect to="/events/local" />;
   }
 
   return (

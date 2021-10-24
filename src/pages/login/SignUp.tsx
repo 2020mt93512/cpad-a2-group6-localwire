@@ -16,7 +16,7 @@ import Input from '../../components/Input';
 import { useLoading } from '../../context/LoadingContext';
 import { useLogin } from '../../hooks/login';
 import authService from '../../services/AuthService';
-import firestoreService from '../../services/FirestoreService';
+import dbService from '../../services/DbServiceImpl';
 import './Login.css';
 
 const SignUp: React.FC = () => {
@@ -30,6 +30,7 @@ const SignUp: React.FC = () => {
     emailError,
     passwordError,
   } = useLogin();
+  const [displayName, setDisplayName] = React.useState<string>('');
   const history = useHistory();
 
   const { showSpinner, dismissSpinner } = useLoading();
@@ -48,11 +49,11 @@ const SignUp: React.FC = () => {
 
     showSpinner('login');
     try {
-      const userCredential = await authService.signUp(emailId, password);
+      const userCredential = await authService.signUp(emailId, password, displayName);
       if (!userCredential) {
         throw new Error('Unable to create user');
       }
-      await firestoreService.addNewUser(userCredential.user);
+      await dbService.addNewUser(userCredential.user);
       redirectToLogin();
     } catch (err: any) {
       console.error(err);
@@ -65,15 +66,16 @@ const SignUp: React.FC = () => {
       dismissSpinner('login');
     }
   }, [
-    dismissSpinner,
-    dismissToast,
-    emailId,
-    password,
-    showSpinner,
-    showToast,
     validateEmailId,
     validatePassword,
+    showSpinner,
+    emailId,
+    password,
+    displayName,
     redirectToLogin,
+    showToast,
+    dismissToast,
+    dismissSpinner,
   ]);
 
   return (
@@ -104,6 +106,11 @@ const SignUp: React.FC = () => {
                 error={passwordError}
                 onIonChange={onPasswordChange}
                 onIonBlur={validatePassword}
+              />
+              <Input
+                label="Display Name"
+                value={displayName}
+                onIonChange={(e) => setDisplayName(e.detail.value ?? '')}
               />
             </IonCardContent>
 

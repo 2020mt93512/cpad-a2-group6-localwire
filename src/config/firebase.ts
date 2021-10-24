@@ -9,6 +9,7 @@ const firebaseConfigOptions: FirebaseOptions = {
   messagingSenderId: '538953225091',
   appId: '1:538953225091:web:b1ee8e402e72ab34105cb6',
   measurementId: 'G-2MR57RQTYH',
+  databaseURL: "https://localwire-cpad-a2-g6-default-rtdb.firebaseio.com",
 };
 
 const initializeFirebaseApp = (): FirebaseApp | null => {
@@ -29,3 +30,7 @@ const firebaseConfig = {
 };
 
 export default firebaseConfig;
+
+
+
+

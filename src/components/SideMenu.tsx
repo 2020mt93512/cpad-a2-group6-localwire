@@ -15,9 +15,9 @@ import { useLocation } from 'react-router-dom';
 
 import { useAuth } from '../context/AuthContext';
 import authService from '../services/AuthService';
-import './Menu.css';
+import './SideMenu.css';
 
-interface AppPage {
+interface SideMenuItem {
   url?: string;
   iosIcon: string;
   mdIcon: string;
@@ -25,7 +25,7 @@ interface AppPage {
   onClick?: () => void;
 }
 
-const appPages: AppPage[] = [
+const menuItems: SideMenuItem[] = [
   {
     title: 'Log Out',
     iosIcon: logOutOutline,
@@ -34,7 +34,7 @@ const appPages: AppPage[] = [
   },
 ];
 
-const Menu: React.FC = () => {
+const SideMenu: React.FC = () => {
   const location = useLocation();
   const { user } = useAuth();
 
@@ -44,18 +44,18 @@ const Menu: React.FC = () => {
         <IonList id="inbox-list">
           <IonListHeader>LocalWire</IonListHeader>
           <IonNote>{user?.displayName ?? user?.email}</IonNote>
-          {appPages.map((appPage, index) => (
+          {menuItems.map((menuItem, index) => (
             <IonMenuToggle key={index} autoHide={false}>
               <IonItem
-                className={location.pathname === appPage.url ? 'selected' : ''}
-                routerLink={appPage.url}
+                className={location.pathname === menuItem.url ? 'selected' : ''}
+                routerLink={menuItem.url}
                 routerDirection="none"
                 lines="none"
                 detail={false}
-                onClick={appPage.onClick}
+                onClick={menuItem.onClick}
               >
-                <IonIcon slot="start" icon={appPage.iosIcon} />
-                <IonLabel>{appPage.title}</IonLabel>
+                <IonIcon slot="start" icon={menuItem.iosIcon} />
+                <IonLabel>{menuItem.title}</IonLabel>
               </IonItem>
             </IonMenuToggle>
           ))}
@@ -65,4 +65,4 @@ const Menu: React.FC = () => {
   );
 };
 
-export default Menu;
+export default SideMenu;
