@@ -5,11 +5,9 @@ import {
   IonCard,
   IonCardHeader,
   IonCardSubtitle,
-  IonCol,
   IonContent,
   IonHeader,
   IonIcon,
-  IonLabel,
   IonNote,
   IonPage,
   IonRow,
@@ -18,7 +16,8 @@ import {
   IonToolbar,
   useIonViewWillEnter,
 } from '@ionic/react';
-import { arrowForward, navigateOutline } from 'ionicons/icons';
+import { navigateOutline, pencilOutline, timeOutline } from 'ionicons/icons';
+import moment from 'moment';
 import React from 'react';
 
 import { useAuth } from '../../context/AuthContext';
@@ -80,6 +79,8 @@ const MyEvents: React.FC = () => {
                 ? `${Math.round(getDistanceInKm(eventItem))} km away`
                 : `${Math.round(getDistanceInKm(eventItem) * 1000)} m away`;
 
+            const durationAgo = moment(new Date(eventItem.timestamp)).fromNow();
+
             return (
               <IonCard key={eventItem.uid} routerLink={`/events/${user.uid}/${eventItem.uid}`}>
                 <IonCardHeader>
@@ -92,10 +93,14 @@ const MyEvents: React.FC = () => {
                         <IonIcon icon={navigateOutline} />
                         {distanceString}
                       </p>
+                      <p>
+                        <IonIcon icon={timeOutline} />
+                        {durationAgo}
+                      </p>
                     </IonText>
 
                     <IonButton size="small" color="primary">
-                      <IonIcon icon={arrowForward} />
+                      <IonIcon icon={pencilOutline} />
                     </IonButton>
                   </IonRow>
                 </IonCardHeader>

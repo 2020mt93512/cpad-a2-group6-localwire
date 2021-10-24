@@ -119,6 +119,12 @@ const updateEvent = async (userUid: string, eventUid: string, eventData: UpdateE
   await firebaseDatabase.update(eventsRef, eventData);
 };
 
+const deleteEvent = async (userUid: string, eventUid: string): Promise<void> => {
+  const db = firebaseDatabase.getDatabase();
+  const eventsRef = firebaseDatabase.ref(db, `events/${userUid}/${eventUid}`);
+  return firebaseDatabase.remove(eventsRef);
+};
+
 const realtimeDbService: DbService = {
   addNewUser,
   addEvent,
@@ -128,6 +134,7 @@ const realtimeDbService: DbService = {
   getMyEvents,
   getEventData,
   updateEvent,
+  deleteEvent,
 };
 
 export default realtimeDbService;

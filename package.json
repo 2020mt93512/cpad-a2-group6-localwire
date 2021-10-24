@@ -25,6 +25,7 @@
     "firebase": "^9.1.2",
     "geofire-common": "^5.2.0",
     "ionicons": "^5.4.0",
+    "moment": "^2.29.1",
     "pigeon-maps": "^0.19.7",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",

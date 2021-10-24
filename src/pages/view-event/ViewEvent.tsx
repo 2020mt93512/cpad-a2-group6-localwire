@@ -43,6 +43,23 @@ const ViewEvent: React.FC = (props) => {
     history.replace('/events/my');
   }, [history]);
 
+  const deleteEvent = React.useCallback(async () => {
+    showSpinner('delete-event');
+    try {
+      await dbServiceImpl.deleteEvent(useruid, eventuid);
+      redirectToMyEvents();
+    } catch (err: any) {
+      console.error(err);
+      showToast({
+        message: err?.message ?? 'Unable to delete event. Please try again',
+        duration: 5000,
+        buttons: [{ text: 'close', handler: () => dismissToast() }],
+      });
+    } finally {
+      dismissSpinner('delete-event');
+    }
+  }, []);
+
   const updateEvent = React.useCallback(async () => {
     if (newEvent && useruid) {
       try {
@@ -175,11 +192,11 @@ const ViewEvent: React.FC = (props) => {
               </IonCol>
             </IonRow>
             <IonRow>
-              {/* <IonCol size="6" className="ion-padding-horizontal ion-padding-top">
-                <IonButton color="dark" onClick={dismissModal}>
-                  Cancel
+              <IonCol size="6" className="ion-padding-horizontal ion-padding-top">
+                <IonButton color="danger" onClick={deleteEvent}>
+                  Delete
                 </IonButton>
-              </IonCol> */}
+              </IonCol>
               <IonCol size="6" className="ion-padding-horizontal ion-padding-top">
                 <IonButton color="primary" onClick={updateEvent}>
                   Update Event
