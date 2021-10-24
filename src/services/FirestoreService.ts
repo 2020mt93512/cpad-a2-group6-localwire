@@ -29,6 +29,14 @@ const setupOnEventValueChange = (
   return () => null;
 };
 
+const setupOnMyEventsValueChange = (
+  userUid: string,
+  setEventsList: React.Dispatch<React.SetStateAction<EventEntry[]>>
+): Unsubscribe => {
+  console.error('not implemented yet');
+  return () => null;
+};
+
 const getNearbyEvents = (currentLocation: LocationCoords, radiusInM = 50000): Promise<EventEntry[]> => {
   return Promise.reject('not implemented yet');
 };
@@ -73,6 +81,7 @@ const firestoreService: DbService = {
   addNewUser,
   addEvent,
   setupOnEventValueChange,
+  setupOnMyEventsValueChange,
   getNearbyEvents,
   getEventTags,
   getMyEvents,

@@ -40,7 +40,6 @@ const setupOnEventValueChange = (
 ): Unsubscribe => {
   const db = firebaseDatabase.getDatabase();
   const eventsRef = firebaseDatabase.ref(db, 'events');
-  // const q = nearbyEventsQuery(eventsRef, []);
   const unsub = firebaseDatabase.onValue(eventsRef, (snapshot: DataSnapshot) => {
     const itemsByUser: Record<string, Record<string, EventEntry>> = snapshot.val();
     if (itemsByUser) {
@@ -62,6 +61,28 @@ const setupOnEventValueChange = (
     } else {
       setEventsList([]);
     }
+  });
+
+  return unsub;
+};
+
+const setupOnMyEventsValueChange = (
+  userUid: string,
+  setEventsList: React.Dispatch<React.SetStateAction<EventEntry[]>>
+): Unsubscribe => {
+  const db = firebaseDatabase.getDatabase();
+  const eventsRef = firebaseDatabase.ref(db, `events/${userUid}`);
+  const unsub = firebaseDatabase.onValue(eventsRef, (snapshot: DataSnapshot) => {
+    const items: EventEntry[] = snapshot.val();
+    const eventItems = items
+      ? Object.values(items).map((items) => ({
+          ...items,
+          tags: items.tags ? Object.values(items.tags) : [],
+          verifiedBy: items.verifiedBy ? Object.values(items.verifiedBy) : [],
+          unverifiedBy: items.unverifiedBy ? Object.values(items.unverifiedBy) : [],
+        }))
+      : [];
+    setEventsList(eventItems);
   });
 
   return unsub;
@@ -167,6 +188,7 @@ const realtimeDbService: DbService = {
   addNewUser,
   addEvent,
   setupOnEventValueChange,
+  setupOnMyEventsValueChange,
   getNearbyEvents,
   getEventTags,
   getMyEvents,

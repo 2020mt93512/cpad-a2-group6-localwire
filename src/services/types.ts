@@ -13,6 +13,10 @@ export interface DbService {
     setEventsList: React.Dispatch<React.SetStateAction<EventEntry[]>>,
     radiusInM?: number
   ) => Unsubscribe;
+  setupOnMyEventsValueChange: (
+    userUid: string,
+    setEventsList: React.Dispatch<React.SetStateAction<EventEntry[]>>
+  ) => Unsubscribe;
   getNearbyEvents: (currentLocation: LocationCoords, radiusInM?: number) => Promise<EventEntry[]>;
   getEventTags: () => Promise<EventTag[]>;
   getMyEvents: (userUid: string) => Promise<EventEntry[]>;

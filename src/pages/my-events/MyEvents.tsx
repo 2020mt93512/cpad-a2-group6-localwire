@@ -15,7 +15,6 @@ import {
   IonText,
   IonTitle,
   IonToolbar,
-  useIonViewWillEnter,
 } from '@ionic/react';
 import { navigateOutline, pencilOutline, timeOutline } from 'ionicons/icons';
 import moment from 'moment';
@@ -39,7 +38,7 @@ const MyEvents: React.FC = () => {
   const getDistanceInKm = (eventItem: EventEntry) =>
     currentLocation ? distanceBetween({ latitude: eventItem.lat, longitude: eventItem.long }, currentLocation) : NaN;
 
-  useIonViewWillEnter(() => {
+  React.useEffect(() => {
     const getCurrentLocation = async () => {
       const fetchedLocation = await getLocation();
       return fetchedLocation;
@@ -48,16 +47,18 @@ const MyEvents: React.FC = () => {
     // get current location and the list of events around that location once during mount
     getCurrentLocation().then((currentLocation) => {
       setCurrentLocation(currentLocation);
-      dbServiceImpl.getMyEvents((user as User).uid).then((myEvents) => {
-        setEvents(myEvents);
-      });
+      currentEventSub.current = dbServiceImpl.setupOnMyEventsValueChange((user as User).uid, setEvents);
     });
 
     // get list of tags for filtering during mount
     dbServiceImpl.getEventTags().then((newTags) => {
       setEventTags(newTags);
     });
-  });
+
+    return () => {
+      currentEventSub.current?.();
+    };
+  }, []);
 
   const getVerificationColorRange = (verifiedPercent: number) => {
     if (verifiedPercent >= 75) {
