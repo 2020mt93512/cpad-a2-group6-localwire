@@ -1,6 +1,7 @@
 import type { User } from '@firebase/auth';
 import type { Unsubscribe } from '@firebase/util';
 import {
+  IonBadge,
   IonButton,
   IonCard,
   IonCardHeader,
@@ -14,7 +15,6 @@ import {
   IonText,
   IonTitle,
   IonToolbar,
-  useIonViewWillEnter,
 } from '@ionic/react';
 import { navigateOutline, pencilOutline, timeOutline } from 'ionicons/icons';
 import moment from 'moment';
@@ -38,7 +38,7 @@ const MyEvents: React.FC = () => {
   const getDistanceInKm = (eventItem: EventEntry) =>
     currentLocation ? distanceBetween({ latitude: eventItem.lat, longitude: eventItem.long }, currentLocation) : NaN;
 
-  useIonViewWillEnter(() => {
+  React.useEffect(() => {
     const getCurrentLocation = async () => {
       const fetchedLocation = await getLocation();
       return fetchedLocation;
@@ -47,16 +47,27 @@ const MyEvents: React.FC = () => {
     // get current location and the list of events around that location once during mount
     getCurrentLocation().then((currentLocation) => {
       setCurrentLocation(currentLocation);
-      dbServiceImpl.getMyEvents((user as User).uid).then((myEvents) => {
-        setEvents(myEvents);
-      });
+      currentEventSub.current = dbServiceImpl.setupOnMyEventsValueChange((user as User).uid, setEvents);
     });
 
     // get list of tags for filtering during mount
     dbServiceImpl.getEventTags().then((newTags) => {
       setEventTags(newTags);
     });
-  });
+
+    return () => {
+      currentEventSub.current?.();
+    };
+  }, []);
+
+  const getVerificationColorRange = (verifiedPercent: number) => {
+    if (verifiedPercent >= 75) {
+      return 'success';
+    } else if (verifiedPercent >= 50) {
+      return 'warning';
+    }
+    return 'danger';
+  };
 
   return (
     <IonPage>
@@ -80,6 +91,10 @@ const MyEvents: React.FC = () => {
                 : `${Math.round(getDistanceInKm(eventItem) * 1000)} m away`;
 
             const durationAgo = moment(new Date(eventItem.timestamp)).fromNow();
+            const totalVotes = eventItem.verifiedBy.length + eventItem.unverifiedBy.length;
+
+            const verifiedPercent = totalVotes > 0 ? (eventItem.verifiedBy.length * 100) / totalVotes : 0;
+            const verificationBadgeColor = getVerificationColorRange(verifiedPercent);
 
             return (
               <IonCard key={eventItem.uid} routerLink={`/events/${user.uid}/${eventItem.uid}`}>
@@ -99,6 +114,7 @@ const MyEvents: React.FC = () => {
                       </p>
                     </IonText>
 
+                    <IonBadge color={verificationBadgeColor}>{verifiedPercent}% verified</IonBadge>
                     <IonButton size="small" color="primary">
                       <IonIcon icon={pencilOutline} />
                     </IonButton>

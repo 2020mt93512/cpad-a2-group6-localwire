@@ -29,6 +29,14 @@ const setupOnEventValueChange = (
   return () => null;
 };
 
+const setupOnMyEventsValueChange = (
+  userUid: string,
+  setEventsList: React.Dispatch<React.SetStateAction<EventEntry[]>>
+): Unsubscribe => {
+  console.error('not implemented yet');
+  return () => null;
+};
+
 const getNearbyEvents = (currentLocation: LocationCoords, radiusInM = 50000): Promise<EventEntry[]> => {
   return Promise.reject('not implemented yet');
 };
@@ -53,16 +61,37 @@ const deleteEvent = async (userUid: string, eventUid: string): Promise<void> => 
   return Promise.reject('not implemented yet');
 };
 
+const verifyEvent = async (createdByUid: string, userUid: string, eventUid: string): Promise<void> => {
+  return Promise.reject('not implemented yet');
+};
+
+const unverifyEvent = async (createdByUid: string, userUid: string, eventUid: string): Promise<void> => {
+  return Promise.reject('not implemented yet');
+};
+
+const cancelVerifyEvent = async (createdByUid: string, userUid: string, eventUid: string): Promise<void> => {
+  return Promise.reject('not implemented yet');
+};
+
+const cancelUnverifyEvent = async (createdByUid: string, userUid: string, eventUid: string): Promise<void> => {
+  return Promise.reject('not implemented yet');
+};
+
 const firestoreService: DbService = {
   addNewUser,
   addEvent,
   setupOnEventValueChange,
+  setupOnMyEventsValueChange,
   getNearbyEvents,
   getEventTags,
   getMyEvents,
   getEventData,
   updateEvent,
   deleteEvent,
+  verifyEvent,
+  unverifyEvent,
+  cancelVerifyEvent,
+  cancelUnverifyEvent,
 };
 
 export default firestoreService;
